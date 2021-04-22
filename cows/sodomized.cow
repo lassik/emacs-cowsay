@@ -8,5 +8,5 @@ $the_cow = <<EOC;
          $thoughts  ($eyes)\\_____/_\\ \\
             (__)\\       ) /
              $tongue ||----w ((
-                ||     ||>> 
+                ||     ||>>
 EOC

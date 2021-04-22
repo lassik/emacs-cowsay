@@ -5,11 +5,11 @@ $the_cow = <<EOC;
   $thoughts
    $thoughts          .
        ___   //
-     {~._.~}// 
-      ( Y )K/  
-     ()~*~()   
-     (_)-(_)   
-     Luke    
+     {~._.~}//
+      ( Y )K/
+     ()~*~()
+     (_)-(_)
+     Luke
      Sywalker
-     koala   
+     koala
 EOC
