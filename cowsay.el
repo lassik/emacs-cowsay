@@ -92,6 +92,7 @@ particular cows preferred by the program.")
           (push (buffer-substring start end) parts)))
       (reverse parts))))
 
+;;;###autoload
 (defun cowsay-load-cow-file (file)
   "Load cow definition from text FILE."
   (interactive "fLoad .cow file: ")
@@ -102,6 +103,7 @@ particular cows preferred by the program.")
       (setcdr cow-pair (cowsay--parse-cow-file file)))
     cow))
 
+;;;###autoload
 (defun cowsay-load-cows-directory (directory)
   "Load cow definitions from all matching files in DIRECTORY.
 
@@ -114,6 +116,7 @@ Subdirectories are not visited."
       (message "Loaded %d cows" (length cows)))
     cows))
 
+;;;###autoload
 (defun cowsay-load-cows ()
   "Load cow definitions from the usual files.
 
@@ -218,6 +221,7 @@ Returns nil if COW is not loaded."
         (completing-read "Cow: " cowsay-cows nil t default
                          'cowsay-cow-history default))))
 
+;;;###autoload
 (defun cowsay-replace-region (start end &optional cow)
   "Replace the text between START and END with COW saying it.
 
@@ -232,6 +236,7 @@ which cow to use in the minibuffer."
     (delete-region start end)
     (insert cartoon)))
 
+;;;###autoload
 (defun cowsay-region (start end &optional cow)
   "Show ASCII art with COW saying the text between START and END.
 
@@ -245,6 +250,7 @@ which cow to use in the minibuffer."
    (called-interactively-p 'interactive)
    (cowsay--string-to-string (buffer-substring start end) cow)))
 
+;;;###autoload
 (defun cowsay-string (string &optional cow)
   "Show ASCII art with poorly drawn COW saying STRING.
 
@@ -257,6 +263,7 @@ When a prefix argument is given, first ask which cow to use."
    (called-interactively-p 'interactive)
    (cowsay--string-to-string string cow)))
 
+;;;###autoload
 (defun cowsay-shell-command (command &optional cow)
   "Show ASCII art with COW saying the output of COMMAND.
 
