@@ -273,7 +273,9 @@ When called interactively, ask for the command in the minibuffer.
 When a prefix argument is given, first ask which cow to use."
   (interactive
    (let ((cow (cowsay--prompt-for-cow current-prefix-arg)))
-     (list (read-from-minibuffer "Shell command: ") cow)))
+     (list (read-from-minibuffer
+            "Shell command: " nil nil nil 'shell-command-history)
+           cow)))
   (cowsay--display-string
    (called-interactively-p 'interactive)
    (cowsay--string-to-string (shell-command-to-string command) cow)))
