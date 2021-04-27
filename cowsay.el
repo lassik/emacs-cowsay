@@ -220,16 +220,19 @@ Returns nil if COW is not loaded."
     (completing-read "Cow: " cowsay-cows nil t default
                      'cowsay-cow-history default)))
 
+(defun cowsay--get-region-and-cow (prompt-p)
+  "Internal helper to interactively get (START END COW) arguments."
+  (if (not (use-region-p)) (error "The region is not active now")
+      (let ((cow (and prompt-p (cowsay--prompt-for-cow))))
+        (list (region-beginning) (region-end) cow))))
+
 ;;;###autoload
 (defun cowsay-replace-region (start end &optional cow)
   "Replace the text between START and END with COW saying it.
 
 When called interactively and a prefix argument is given, ask
 which cow to use in the minibuffer."
-  (interactive
-   (if (not (use-region-p)) (error "The region is not active now")
-       (let ((cow (and current-prefix-arg (cowsay--prompt-for-cow))))
-         (list (region-beginning) (region-end) cow))))
+  (interactive (cowsay--get-region-and-cow current-prefix-arg))
   (let* ((string (buffer-substring start end))
          (cartoon (cowsay--string-to-string string cow)))
     (delete-region start end)
@@ -241,10 +244,7 @@ which cow to use in the minibuffer."
 
 When called interactively and a prefix argument is given, ask
 which cow to use in the minibuffer."
-  (interactive
-   (if (not (use-region-p)) (error "The region is not active now")
-       (let ((cow (and current-prefix-arg (cowsay--prompt-for-cow))))
-         (list (region-beginning) (region-end) cow))))
+  (interactive (cowsay--get-region-and-cow current-prefix-arg))
   (cowsay--display-string
    (called-interactively-p 'interactive)
    (cowsay--string-to-string (buffer-substring start end) cow)))
