@@ -214,12 +214,11 @@ Returns nil if COW is not loaded."
   (when display-p (display-message-or-buffer string "*Cow Say*"))
   string)
 
-(defun cowsay--prompt-for-cow (prompt-p)
-  "Internal helper to prompt for cow in the minibuffer when PROMPT-P."
+(defun cowsay--prompt-for-cow ()
+  "Internal helper to select a cow in the minibuffer."
   (let ((default (cowsay--get-default-cow)))
-    (if (not prompt-p) default
-        (completing-read "Cow: " cowsay-cows nil t default
-                         'cowsay-cow-history default))))
+    (completing-read "Cow: " cowsay-cows nil t default
+                     'cowsay-cow-history default)))
 
 ;;;###autoload
 (defun cowsay-replace-region (start end &optional cow)
@@ -229,7 +228,7 @@ When called interactively and a prefix argument is given, ask
 which cow to use in the minibuffer."
   (interactive
    (if (not (use-region-p)) (error "The region is not active now")
-       (let ((cow (cowsay--prompt-for-cow current-prefix-arg)))
+       (let ((cow (and current-prefix-arg (cowsay--prompt-for-cow))))
          (list (region-beginning) (region-end) cow))))
   (let* ((string (buffer-substring start end))
          (cartoon (cowsay--string-to-string string cow)))
@@ -244,7 +243,7 @@ When called interactively and a prefix argument is given, ask
 which cow to use in the minibuffer."
   (interactive
    (if (not (use-region-p)) (error "The region is not active now")
-       (let ((cow (cowsay--prompt-for-cow current-prefix-arg)))
+       (let ((cow (and current-prefix-arg (cowsay--prompt-for-cow))))
          (list (region-beginning) (region-end) cow))))
   (cowsay--display-string
    (called-interactively-p 'interactive)
@@ -257,7 +256,7 @@ which cow to use in the minibuffer."
 When called interactively, ask for a string in the minibuffer.
 When a prefix argument is given, first ask which cow to use."
   (interactive
-   (let ((cow (cowsay--prompt-for-cow current-prefix-arg)))
+   (let ((cow (and current-prefix-arg (cowsay--prompt-for-cow))))
      (list (read-from-minibuffer "Cow say: ") cow)))
   (cowsay--display-string
    (called-interactively-p 'interactive)
@@ -272,7 +271,7 @@ COMMAND is passed to the system shell as with `shell-command'.
 When called interactively, ask for the command in the minibuffer.
 When a prefix argument is given, first ask which cow to use."
   (interactive
-   (let ((cow (cowsay--prompt-for-cow current-prefix-arg)))
+   (let ((cow (and current-prefix-arg (cowsay--prompt-for-cow))))
      (list (read-from-minibuffer
             "Shell command: " nil nil nil 'shell-command-history)
            cow)))
