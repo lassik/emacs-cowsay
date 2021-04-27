@@ -202,7 +202,7 @@ Returns nil if COW is not loaded."
     (insert " " (make-string (+ 1 longest 1) ?\-) " \n")))
 
 (defun cowsay--string-to-string (string cow)
-  "Return a string with poorly drawn ASCII COW saying STRING."
+  "Internal helper to return a string with COW saying STRING."
   (with-temp-buffer
     (insert string)
     (cowsay--bubble-wrap-buffer cowsay--speech-bubble)
