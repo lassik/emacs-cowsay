@@ -221,7 +221,9 @@ Returns nil if COW is not loaded."
                      'cowsay-cow-history default)))
 
 (defun cowsay--get-region-and-cow (prompt-p)
-  "Internal helper to interactively get (START END COW) arguments."
+  "Internal helper to interactively get (START END COW) arguments.
+
+When PROMPT-P is non-nil, prompt for the cow."
   (if (not (use-region-p)) (error "The region is not active now")
       (let ((cow (and prompt-p (cowsay--prompt-for-cow))))
         (list (region-beginning) (region-end) cow))))
