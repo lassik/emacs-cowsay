@@ -63,8 +63,6 @@ particular cows preferred by the program.")
 (defun cowsay--parse-cow-file (file)
   "Internal helper to parse a cow from text FILE."
   ;; TODO: Parse "${eyes}".
-  ;; TODO: Parse "\\\\".
-  ;; TODO: Parse "\\@".
   (with-temp-buffer
     (insert-file-contents file)
     (goto-char (point-max))
@@ -75,6 +73,11 @@ particular cows preferred by the program.")
     (goto-char (point-min))
     (while (re-search-forward "^.*EOC.*\n" nil t)
       (replace-match ""))
+    (goto-char (point-min))
+    (while (search-forward "\\@") (replace-match "@"))
+    (goto-char (point-min))
+    ;; Replace two backslashes with one:
+    (while (search-forward "\\\\") (replace-match "\\\\"))
     (goto-char (point-min))
     (let ((parts '())
           (start (point))
