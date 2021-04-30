@@ -158,7 +158,7 @@ Returns nil if COW is not loaded."
       (insert (cond ((stringp part) part)
                     ((eq part 'eyes) "@@")
                     ((eq part 'tongue) "  ")
-                    ((eq part 'thoughts) "\\ ")
+                    ((eq part 'thoughts) "\\")
                     (t (error "Cow %S is ill-defined" cow)))))))
 
 (defun cowsay--bubble-wrap-buffer (bubble)
