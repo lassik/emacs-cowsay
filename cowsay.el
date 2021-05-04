@@ -114,7 +114,7 @@ Subdirectories are not visited."
   (interactive "DLoad .cow files from directory: ")
   (let ((cows (mapcar #'cowsay-load-cow-file
                       (let ((case-fold-search t))
-                        (directory-files directory t "^[a-z0-9-]+.cow$")))))
+                        (directory-files directory t "^[a-z0-9-]+\\.cow$")))))
     (when (called-interactively-p 'interactive)
       (message "Loaded %d cows" (length cows)))
     cows))
