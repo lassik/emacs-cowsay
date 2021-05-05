@@ -35,7 +35,7 @@ string) and remaining elements are cow parts. A cow part is
 either a string (which is inserted verbatim) or one of the
 symbols 'eyes, 'thoughts, 'tongue.")
 
-(defvar cowsay-preferred-cows '("www")
+(defvar cowsay-preferred-cows '("default")
   "List of user's favorite cow names as strings.
 
 When cowsay is called without asking for any particular cow, the
