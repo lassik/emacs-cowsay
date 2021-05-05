@@ -65,6 +65,21 @@ cows preferred by the program."
   :type '(radio (say :tag "Speech bubble")
                 (think :tag "Thought bubble")))
 
+(defvar cowsay-eyes ""
+  "A 2-character string to use as the cow's eyes.")
+
+(defvar cowsay-tongue ""
+  "A 2-character string to use as the cow's tongue.")
+
+(defun cowsay--get-accessory (string default)
+  "Internal helper to get eyes/tongue from STRING or DEFAULT."
+  (if (not (stringp string)) default
+    (let ((n (length string)))
+      (cond ((= n 0) default)
+            ((= n 1) (concat string " "))
+            ((= n 2) string)
+            (t (substring string 0 2))))))
+
 (defun cowsay--get-bubble ()
   "Internal helper to get the speech or thought bubble."
   (let ((style cowsay-bubble-style))
@@ -172,9 +187,11 @@ Returns nil if COW is not loaded."
     (dolist (part (or (cowsay--get-cow-parts cow)
                       (error "No such cow: %S" cow)))
       (insert (cond ((stringp part) part)
-                    ((eq part 'eyes) "@@")
+                    ((eq part 'eyes)
+                     (cowsay--get-accessory cowsay-eyes "oo"))
+                    ((eq part 'tongue)
+                     (cowsay--get-accessory cowsay-tongue "  "))
                     ((eq part 'thoughts) thoughts)
-                    ((eq part 'tongue) "  ")
                     (t (error "Cow %S is ill-defined" cow)))))))
 
 (defun cowsay--bubble-wrap-buffer (bubble)
