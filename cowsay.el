@@ -49,11 +49,15 @@ particular cows preferred by the program.")
 (defvar cowsay-cow-history '()
   "History of which cows have been used to say things.")
 
-(defconst cowsay--speech-bubble "<>/\\\\/||\\"
-  "Internal helper defining the speech bubble.")
+(defvar cowsay-bubble-style 'say
+  "Either 'say or 'think.")
 
-(defconst cowsay--thought-bubble "()()()()o"
-  "Internal helper defining the thought bubble.")
+(defun cowsay--get-bubble ()
+  "Internal helper to get the speech or thought bubble."
+  (let ((style cowsay-bubble-style))
+    (cond ((eq style 'say) "<>/\\\\/||\\")
+          ((eq style 'think) "()()()()o")
+          (t (error "Unknown cowsay-bubble-style: %S" style)))))
 
 (defun cowsay--get-system-cowpath ()
   "Internal helper to parse COWPATH from the environment."
@@ -149,14 +153,14 @@ Returns nil if COW is not loaded."
       (setq default (or default (and (cowsay--get-cow-parts cow) cow))))
     (or default (error "No cows have been loaded"))))
 
-(defun cowsay--insert-cow (cow)
-  "Internal helper to insert COW at point."
+(defun cowsay--insert-cow (cow thoughts)
+  "Internal helper to insert COW with THOUGHTS at point."
   (let ((cow (or cow (cowsay--get-default-cow))))
     (dolist (part (or (cowsay--get-cow-parts cow)
                       (error "No such cow: %S" cow)))
       (insert (cond ((stringp part) part)
                     ((eq part 'eyes) "@@")
-                    ((eq part 'thoughts) "\\")
+                    ((eq part 'thoughts) thoughts)
                     ((eq part 'tongue) "  ")
                     (t (error "Cow %S is ill-defined" cow)))))))
 
@@ -172,7 +176,6 @@ Returns nil if COW is not loaded."
         (r-bot    (substring bubble 5 6))
         (l-side   (substring bubble 6 7))
         (r-side   (substring bubble 7 8))
-        ;;(thoughts (substring bubble 8 9))  ; TODO
         (longest  0))
     (goto-char (point-max))
     (unless (eql ?\n (char-before)) (insert "\n"))
@@ -206,10 +209,12 @@ Returns nil if COW is not loaded."
 (defun cowsay--string-to-string (string cow)
   "Internal helper to return a string with COW saying STRING."
   (with-temp-buffer
-    (insert string)
-    (cowsay--bubble-wrap-buffer cowsay--speech-bubble)
-    (cowsay--insert-cow cow)
-    (buffer-string)))
+    (let* ((bubble (cowsay--get-bubble))
+           (thoughts (substring bubble 8 9)))
+      (insert string)
+      (cowsay--bubble-wrap-buffer bubble)
+      (cowsay--insert-cow cow thoughts)
+      (buffer-string))))
 
 (defun cowsay--display-string (display-p string)
   "Internal helper to display STRING when DISPLAY-P is non-nil."
