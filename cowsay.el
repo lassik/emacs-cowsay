@@ -221,19 +221,22 @@ Returns nil if COW is not loaded."
   (when display-p (display-message-or-buffer string "*Cow Say*"))
   string)
 
-(defun cowsay--prompt-for-cow ()
-  "Internal helper to select a cow in the minibuffer."
-  (let ((default (cowsay--get-default-cow)))
-    (completing-read "Cow: " cowsay-cows nil t default
-                     'cowsay-cow-history default)))
+(defun cowsay--prompt-for-cow (prompt-p)
+  "Internal helper to select a cow in the minibuffer when PROMPT-P."
+  (and prompt-p
+       (let ((default (cowsay--get-default-cow)))
+         (completing-read "Cow: " cowsay-cows nil t default
+                          'cowsay-cow-history default))))
 
 (defun cowsay--get-region-and-cow (prompt-p)
   "Internal helper to interactively get (START END COW) arguments.
 
 When PROMPT-P is non-nil, prompt for the cow."
-  (if (not (use-region-p)) (error "The region is not active now")
-      (let ((cow (and prompt-p (cowsay--prompt-for-cow))))
-        (list (region-beginning) (region-end) cow))))
+  (if (not (use-region-p))
+      (error "The region is not active now")
+    (list (region-beginning)
+          (region-end)
+          (cowsay--prompt-for-cow prompt-p))))
 
 ;;;###autoload
 (defun cowsay-replace-region (start end &optional cow)
@@ -265,7 +268,7 @@ which cow to use in the minibuffer."
 When called interactively, ask for a string in the minibuffer.
 When a prefix argument is given, first ask which cow to use."
   (interactive
-   (let ((cow (and current-prefix-arg (cowsay--prompt-for-cow))))
+   (let ((cow (cowsay--prompt-for-cow current-prefix-arg)))
      (list (read-from-minibuffer "Cow say: ") cow)))
   (cowsay--display-string
    (called-interactively-p 'interactive)
@@ -280,7 +283,7 @@ COMMAND is passed to the system shell as with `shell-command'.
 When called interactively, ask for the command in the minibuffer.
 When a prefix argument is given, first ask which cow to use."
   (interactive
-   (let ((cow (and current-prefix-arg (cowsay--prompt-for-cow))))
+   (let ((cow (cowsay--prompt-for-cow current-prefix-arg)))
      (list (read-from-minibuffer
             "Shell command: " nil nil nil 'shell-command-history)
            cow)))
