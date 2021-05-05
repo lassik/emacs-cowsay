@@ -21,36 +21,49 @@
 
 ;;; Code:
 
-(defvar cowsay-directories '("/usr/local/share/cows")
-  "List of directories to search for cow definition files.
+;;;###autoload
+(defgroup cowsay nil
+  "Poorly drawn ASCII cartoons saying things."
+  :group 'games)
+
+(defcustom cowsay-directories '("/usr/local/share/cows")
+  "List of directories to search for .cow files.
 
 Any directories listed in the COWPATH environment variable are
-searched as well.")
+searched as well."
+  :group 'cowsay
+  :type '(list string))
 
 (defvar cowsay-cows '()
   "List of cows that are available for use.
 
 Each entry is a list whose first element is the cow name (a
-string) and remaining elements are cow parts. A cow part is
+string) and remaining elements are cow parts.  A cow part is
 either a string (which is inserted verbatim) or one of the
 symbols 'eyes, 'thoughts, 'tongue.")
 
-(defvar cowsay-preferred-cows '("default")
-  "List of user's favorite cow names as strings.
+(defcustom cowsay-preferred-cows '("default")
+  "List of your favorite cows.
 
-When cowsay is called without asking for any particular cow, the
-first loaded cow from this list is chosen by default. If none of
-the preferred cows are loaded, the first in `cowsay-cows' wins.
+When you don't ask for a particular cow, the first loaded cow
+from this list is chosen by default.  If none of the preferred
+cows are loaded, the first cow available is chosen.
 
-Emacs Lisp code calling cowsay can temporarily override this
-variable using (let ((cowsay-preferred-cows ...)) ...) to use
-particular cows preferred by the program.")
+The value is a list of cow names as strings.  Emacs Lisp code
+calling cowsay can temporarily override this variable
+using (let ((cowsay-preferred-cows ...)) ...) to use particular
+cows preferred by the program."
+  :group 'cowsay
+  :type '(list string))
 
 (defvar cowsay-cow-history '()
   "History of which cows have been used to say things.")
 
-(defvar cowsay-bubble-style 'say
-  "Either 'say or 'think.")
+(defcustom cowsay-bubble-style 'say
+  "Either 'say or 'think."
+  :group 'cowsay
+  :type '(radio (say :tag "Speech bubble")
+                (think :tag "Thought bubble")))
 
 (defun cowsay--get-bubble ()
   "Internal helper to get the speech or thought bubble."
