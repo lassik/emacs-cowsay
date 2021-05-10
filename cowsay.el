@@ -159,8 +159,10 @@ to to `cowsay-cows'. Existing cows with the same name are
 overwritten from the files. Existing cows without matching files
 are left intact."
   (interactive)
-  (mapc #'cowsay-load-cows-directory
-        (append cowsay-directories (cowsay--get-system-cowpath))))
+  (let ((cowpath (append cowsay-directories (cowsay--get-system-cowpath))))
+    (dolist (dir (reverse cowpath))
+      (when (file-directory-p dir)
+        (cowsay-load-cows-directory dir)))))
 
 (defun cowsay-list-cows ()
   "Return a list of all loaded cow names as strings."
