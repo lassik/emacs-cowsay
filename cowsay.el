@@ -26,7 +26,8 @@
   "Poorly drawn ASCII cartoons saying things."
   :group 'games)
 
-(defcustom cowsay-directories '("/usr/local/share/cows")
+(defcustom cowsay-directories
+  '("/usr/local/share/cows" "/usr/share/cowsay/cows")
   "List of directories to search for .cow files.
 
 Any directories listed in the COWPATH environment variable are
