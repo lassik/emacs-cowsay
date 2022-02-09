@@ -27,4 +27,3 @@ Here all variables, which you can change:
   ```elisp
   (setq cowsay-eyes "|]")
   ```
-  * 
