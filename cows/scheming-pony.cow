@@ -1,0 +1,20 @@
+##
+## Scheming Pony
+## Copyright 2018 Kavalogic, Inc.
+## Released under the same terms as cowsay
+##
+
+$the_cow = <<"EOC";
+       $thoughts
+        $thoughts
+         $thoughts
+
+      (\\     /)
+      % ^---^ %
+      %\{ 0 0 \}%%
+       ( *** ) \\%%
+       / ** /   \\%%
+      / ** / |   \\---
+      \\oo/  |   sjm
+       $tongue
+EOC
